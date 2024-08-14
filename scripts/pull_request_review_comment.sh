@@ -1,24 +1,6 @@
 #!/bin/bash
 
-# Get the directory of the current script
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Construct the path to common.sh in the parent directory
-COMMON_FILE="$(dirname "$SCRIPT_DIR")/common.sh"
-
-# Source the common functions
-if [ -f "$COMMON_FILE" ]; then
-    source "$COMMON_FILE"
-else
-    echo "Error: $COMMON_FILE not found" >&2
-    exit 1
-fi
-
-# Load the environment variables
-if ! load_env; then
-    echo "Failed to load environment variables"
-    exit 1
-fi
+source "$(dirname "$0")/env.sh"
 
 PR_NUMBER="$1"
 

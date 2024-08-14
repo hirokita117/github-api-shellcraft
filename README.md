@@ -12,12 +12,12 @@ This repository is a collection of shell scripts for the github api and gh comma
 
 2. Each script loads environment variables from `env.sh`. Make sure to configure `env.sh` correctly before running any scripts. Therefore, please copy `env.sample.sh` beforehand and create `env.sh`.
    ```sh
-   cp env.sample.sh env.sh
+   cp env.sample.sh scripts/env.sh
    ```
 
 3. Edit the `env.sh` file and set your GitHub account information:
    ```sh
-   vi env.sh
+   vi scripts/env.sh
    ```
    Change GITHUB_TOKEN, GITHUB_OWNER, and GITHUB_REPO to appropriate values.
 
