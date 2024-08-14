@@ -31,13 +31,13 @@ This repository is a collection of shell scripts for the github api and gh comma
 ## List of Scripts
 - env.sample.sh (env.sh)
   - Sets environment variables
-- gh_command_sample.sh
+- scripts/gh_command_sample.sh
   - Fetches the list of issues for a repository
 
 ## Usage
 Simply run the shell script.
 ```sh
-./gh_command_sample.sh
+./scripts/gh_command_sample.sh
 ```
 
 ## Notes
