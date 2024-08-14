@@ -6,7 +6,7 @@ This repository is a collection of shell scripts for the github api and gh comma
 
 1. Clone this repository:
    ```sh
-   git clone https://github.com/yourusername/github-api-shellcraft.git
+   git clone git@github.com:hirokita117/github-api-shellcraft.git
    cd github-api-shellcraft
    ```
 
@@ -29,9 +29,9 @@ This repository is a collection of shell scripts for the github api and gh comma
    ```
 
 ## List of Scripts
-- env.sample.sh (env.sh)
+- [env.sample.sh (env.sh)](env.sample.sh)
   - Sets environment variables
-- scripts/gh_command_sample.sh
+- [scripts/gh_command_sample.sh](scripts/gh_command_sample.sh)
   - Fetches the list of issues for a repository
 
 ## Usage
