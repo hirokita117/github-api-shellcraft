@@ -21,11 +21,11 @@ PR_NUMBERS=$(echo $1 | tr ',' ' ')
 SKIPPED_PRS=()
 
 # Print CSV header
-echo "PR URL,Last Approve Time,Merge Time"
+echo "PR URL,Last Approve Time,Master Merge Time"
 
 for PR_NUMBER in $PR_NUMBERS; do
     # Get PR details
-    PR_DETAILS=$(gh api repos/$REPO/pulls/$PR_NUMBER --jq '{mergedAt: .merged_at, number: .number, base: .base.ref, head: .head.ref}')
+    PR_DETAILS=$(gh api repos/$REPO/pulls/$PR_NUMBER --jq '{mergeCommit: .merge_commit_sha, number: .number, base: .base.ref, head: .head.ref}')
 
     # Check if PR is from develop to master
     BASE_BRANCH=$(echo $PR_DETAILS | jq -r .base)
@@ -36,13 +36,13 @@ for PR_NUMBER in $PR_NUMBERS; do
     fi
 
     # If PR is not merged, display error and continue to next PR
-    if [ -z "$PR_DETAILS" ] || [ "$(echo $PR_DETAILS | jq -r .mergedAt)" = "null" ]; then
-        echo "$PR_NUMBER,Not merged,Not merged" # Output in CSV format
+    if [ -z "$PR_DETAILS" ] || [ "$(echo $PR_DETAILS | jq -r .mergeCommit)" = "null" ]; then
+        echo "https://github.com/$REPO/pull/$PR_NUMBER,Not merged,Not merged" # Output in CSV format
         continue
     fi
 
     PR_NUMBER=$(echo $PR_DETAILS | jq -r .number)
-    MERGED_AT=$(echo $PR_DETAILS | jq -r .mergedAt)
+    MERGE_COMMIT=$(echo $PR_DETAILS | jq -r .mergeCommit)
 
     # Get the last approve comment time
     LAST_APPROVE_TIME=$(gh api repos/$REPO/pulls/$PR_NUMBER/reviews --jq 'map(select(.state == "APPROVED")) | max_by(.submitted_at) | .submitted_at')
@@ -52,8 +52,17 @@ for PR_NUMBER in $PR_NUMBERS; do
         continue  # Skip this PR as there is no approve.
     fi
 
+    RELEASE_PULL_REQUEST_NUMBER=$(gh pr list --repo $REPO --search $MERGE_COMMIT --state merged --base master --json number --jq '.[].number')
+
+    if [ "$RELEASE_PULL_REQUEST_NUMBER" = "null" ] || [ "$RELEASE_PULL_REQUEST_NUMBER" = "" ]; then
+        SKIPPED_PRS+=($PR_NUMBER)
+        continue  # Skip this PR as there is no relase.
+    fi
+
+    MASTER_MERGE_TIME=$(gh pr view $RELEASE_PULL_REQUEST_NUMBER --repo $REPO --json mergedAt --jq .mergedAt)
+
     # Output in CSV format
-    echo "https://github.com/$REPO/pull/$PR_NUMBER,$LAST_APPROVE_TIME,$MERGED_AT"
+    echo "https://github.com/$REPO/pull/$PR_NUMBER,$LAST_APPROVE_TIME,$MASTER_MERGE_TIME"
 done
 
 # Print skipped approval PR
