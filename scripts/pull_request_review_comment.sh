@@ -2,12 +2,23 @@
 
 source "$(dirname "$0")/env.sh"
 
+usage() {
+    echo "Usage: $0 PR_NUMBER"
+    echo "Example: $0 1000"
+    exit 1
+}
+
+if [ $# -ne 1 ]; then
+    usage
+fi
+
 PR_NUMBER="$1"
 
 # Validate PR number
 if ! [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
     echo "Error: Invalid pull request number. Please provide a positive integer."
-    exit 1
+    echo -e -n "\\n"
+    usage
 fi
 
 
