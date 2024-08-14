@@ -33,6 +33,8 @@ This repository is a collection of shell scripts for the github api and gh comma
   - Sets environment variables
 - [scripts/gh_command_sample.sh](scripts/gh_command_sample.sh)
   - Fetches the list of issues for a repository
+- [scripts/pull_request_review_comment.sh](scripts/pull_request_review_comment.sh)
+  - Fetches pull request review comment for a repository
 
 ## Usage
 Simply run the shell script.

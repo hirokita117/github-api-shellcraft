@@ -20,6 +20,26 @@ if ! load_env; then
     exit 1
 fi
 
-# Fetch the list of issues for the repository
-echo "List of issues for repository ${GITHUB_OWNER}/${GITHUB_REPO}:"
-gh issue list -R "${GITHUB_OWNER}/${GITHUB_REPO}"
+PR_NUMBER="$1"
+
+# Validate PR number
+if ! [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+    echo "Error: Invalid pull request number. Please provide a positive integer."
+    exit 1
+fi
+
+
+gh api \
+    -H "Accept: application/vnd.github.v3+json" \
+    "/repos/${GITHUB_OWNER}/${GITHUB_REPO}/pulls/${PR_NUMBER}/reviews" \
+    --paginate \
+    | jq '
+        .[]
+        | {
+            id,
+            user: .user.login,
+            state,
+            submitted_at,
+            body
+        }
+    '
