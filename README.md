@@ -35,6 +35,8 @@ This repository is a collection of shell scripts for the github api and gh comma
   - Fetches the list of issues for a repository
 - [scripts/pull_request_review_comment.sh](scripts/pull_request_review_comment.sh)
   - Fetches pull request review comment for a repository
+- [scripts/merged_pull_request.sh](scripts/merged_pull_request.sh)
+  - Get the number of merged pull requests, given an arbitrary time period
 
 ## Usage
 Simply run the shell script.
