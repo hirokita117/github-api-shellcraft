@@ -39,6 +39,7 @@ This repository is a collection of shell scripts for the github api and gh comma
   - Get the number of merged pull requests, given an arbitrary time period
 - [scripts/get_pr_lead_times.sh](scripts/get_pr_lead_times.sh)
   - Get the date and time of the approve and the date and time of the merge into the master branch.
+    - The lead time is defined as the time between the last approve and the master merge.
 
 ## Usage
 Simply run the shell script.
