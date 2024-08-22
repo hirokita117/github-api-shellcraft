@@ -13,10 +13,35 @@ usage() {
 # Function to output CSV
 print_or_append_to_csv() {
     if [ "$CAN_OUTPUT_TO_FILE" = "true" ]; then
-        echo "$1" | sed 's/T/ /g; s/Z//g' >> "$OUTPUT_FILE"
+        echo "$1" >> "$OUTPUT_FILE"
     else
-        echo "$1" | sed 's/T/ /g; s/Z//g'
+        echo "$1"
     fi
+}
+
+# Function to convert date to Unix timestamp
+date_to_timestamp() {
+    date -j -f "%Y-%m-%d %H:%M:%S" "$1" +%s
+}
+
+# Function to calculate time difference
+calculate_time_difference() {
+    local START_TIME=$(echo "$1" | sed 's/T/ /g; s/Z//g')
+    local END_TIME=$(echo "$2" | sed 's/T/ /g; s/Z//g')
+    local START_TIMESTAMP=$(date_to_timestamp "$START_TIME")
+    local END_TIMESTAMP=$(date_to_timestamp "$END_TIME")
+
+    echo $((END_TIMESTAMP - START_TIMESTAMP))
+}
+
+# Function to format seconds to HH:MM:SS
+format_time() {
+    local TOTAL_SECONDS=$1
+    local HOURS=$((TOTAL_SECONDS / 3600))
+    local MINUTES=$(( (TOTAL_SECONDS % 3600) / 60 ))
+    local SECONDS=$((TOTAL_SECONDS % 60))
+
+    printf "%02d:%02d:%02d\n" $HOURS $MINUTES $SECONDS
 }
 
 # Initialize variables
@@ -51,7 +76,7 @@ PR_NUMBERS=$(echo $1 | tr ',' ' ')
 SKIPPED_PRS=()
 
 # Print CSV header
-HEADER="PR URL,Last Approve Time,Master Merge Time"
+HEADER="PR URL,Last Approve Time,Master Merge Time,Lead Time"
 if [ "$CAN_OUTPUT_TO_FILE" = "true" ]; then
     echo "$HEADER" > "$OUTPUT_FILE"
 else
@@ -72,7 +97,7 @@ for PR_NUMBER in $PR_NUMBERS; do
 
     # If PR is not merged, display error and continue to next PR
     if [ -z "$PR_DETAILS" ] || [ "$(echo $PR_DETAILS | jq -r .mergeCommit)" = "null" ]; then
-        print_or_append_to_csv "https://github.com/$REPO/pull/$PR_NUMBER,Not merged,Not merged"
+        print_or_append_to_csv "https://github.com/$REPO/pull/$PR_NUMBER,Not merged,Not merged,00:00:00"
         continue
     fi
 
@@ -96,8 +121,11 @@ for PR_NUMBER in $PR_NUMBERS; do
 
     MASTER_MERGE_TIME=$(gh pr view $RELEASE_PULL_REQUEST_NUMBER --repo $REPO --json mergedAt --jq .mergedAt)
 
+    DIFF=$(calculate_time_difference "$LAST_APPROVE_TIME" "$MASTER_MERGE_TIME")
+    LEAD_TIME=$(format_time $DIFF)
+
     # Output in CSV format
-    print_or_append_to_csv "https://github.com/$REPO/pull/$PR_NUMBER,$LAST_APPROVE_TIME,$MASTER_MERGE_TIME"
+    print_or_append_to_csv "https://github.com/$REPO/pull/$PR_NUMBER,$LAST_APPROVE_TIME,$MASTER_MERGE_TIME,$LEAD_TIME"
 done
 
 # Print skipped approval PR
