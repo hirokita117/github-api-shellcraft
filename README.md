@@ -51,4 +51,7 @@ Simply run the shell script.
 
 - `GITHUB_TOKEN` is sensitive information. Be careful not to commit the `env.sh` file to a public repository.
 
-
+## ⚠️IMPORTANT
+<div style="background-color: #DC143C; color: white; font-weight: bold; padding: 10px; border: 1px solid #000000;">
+  This repository contains scripts that use macOS (BSD) specific commands. Modifications may be necessary for other operating systems.
+</div>
