@@ -6,6 +6,7 @@ source "$(dirname "$0")/env.sh"
 usage() {
     echo "Usage: $0 [-o] <PR_NUMBER1>[,PR_NUMBER2,...]"
     echo "Example: $0 -o 1347,1348,1349"
+    echo "If the -o option is given, get_pr_lead_times.csv file is generated in the outputs/ directory."
     exit 1
 }
 
