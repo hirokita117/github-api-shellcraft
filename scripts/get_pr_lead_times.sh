@@ -20,7 +20,9 @@ print_or_append_to_csv() {
 
 # Initialize variables
 CAN_OUTPUT_TO_FILE=false
-OUTPUT_FILE="get_pr_lead_times.csv"
+ROOT_DIR="$(dirname "$GITHUB_SCRIPTS_DIR")"
+OUTPUT_DIR="$ROOT_DIR/outputs"
+OUTPUT_FILE="$OUTPUT_DIR/get_pr_lead_times.csv"
 
 # Parse command line options
 while getopts ":o" opt; do
