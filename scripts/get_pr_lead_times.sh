@@ -9,6 +9,15 @@ usage() {
     exit 1
 }
 
+# Function to output CSV
+print_or_append_to_csv() {
+    if [ "$CAN_OUTPUT_TO_FILE" = "true" ]; then
+        echo "$1" >> "$OUTPUT_FILE"
+    else
+        echo "$1"
+    fi
+}
+
 # Initialize variables
 CAN_OUTPUT_TO_FILE=false
 OUTPUT_FILE="get_pr_lead_times.csv"
@@ -38,17 +47,13 @@ PR_NUMBERS=$(echo $1 | tr ',' ' ')
 # Array to store skipped PR numbers
 SKIPPED_PRS=()
 
-# Function to output CSV
-print_or_append_to_csv() {
-    if [ "$CAN_OUTPUT_TO_FILE" = "true" ]; then
-        echo "$1" >> "$OUTPUT_FILE"
-    else
-        echo "$1"
-    fi
-}
-
 # Print CSV header
-print_or_append_to_csv "PR URL,Last Approve Time,Master Merge Time"
+HEADER="PR URL,Last Approve Time,Master Merge Time"
+if [ "$CAN_OUTPUT_TO_FILE" = "true" ]; then
+    echo "$HEADER" > "$OUTPUT_FILE"
+else
+    echo "$HEADER"
+fi
 
 for PR_NUMBER in $PR_NUMBERS; do
     # Get PR details
