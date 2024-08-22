@@ -12,9 +12,9 @@ usage() {
 # Function to output CSV
 print_or_append_to_csv() {
     if [ "$CAN_OUTPUT_TO_FILE" = "true" ]; then
-        echo "$1" >> "$OUTPUT_FILE"
+        echo "$1" | sed 's/T/ /g; s/Z//g' >> "$OUTPUT_FILE"
     else
-        echo "$1"
+        echo "$1" | sed 's/T/ /g; s/Z//g'
     fi
 }
 
