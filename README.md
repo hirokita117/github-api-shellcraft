@@ -2,6 +2,11 @@
 
 This repository is a collection of shell scripts for the github api and gh command.
 
+## Preparation before setup
+1. Please set up your personal access token (PAT) in advance. → [official guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic)
+
+2. If you haven't installed the GitHub CLI, follow the [official guide](https://github.com/cli/cli#installation) to install it.
+
 ## Setup
 
 1. Clone this repository:
@@ -21,9 +26,7 @@ This repository is a collection of shell scripts for the github api and gh comma
    ```
    Change GITHUB_TOKEN, GITHUB_OWNER, and GITHUB_REPO to appropriate values.
 
-4. If you haven't installed the GitHub CLI, follow the [official guide](https://github.com/cli/cli#installation) to install it.
-
-5. Authenticate with GitHub CLI:
+4. Authenticate with GitHub CLI:
    ```sh
    gh auth login
    ```
